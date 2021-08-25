@@ -2,14 +2,15 @@
 # Author : Shaikh Aquib
 # Date   : August 2021
 
+import sys
 import tkinter as tk
 import tksheet
-import pandas
 from tkinter import N, S, E, W
-from tkinter import filedialog
+from tkinter import ttk, filedialog
 from layouts.menus.menubar import MenuBar
 from processors.sheet_utilities import SheetManipulator
 from processors.cache_memory import CacheSaver, CacheRetriever
+from processors.data_adapter import DataAdapter
 
 
 class HomeDepotManager(tk.Tk):
@@ -19,14 +20,23 @@ class HomeDepotManager(tk.Tk):
         self.cache_file = 'app_data.json'
         self.cache = {}
 
-        self.menubar      = MenuBar(self)
         self.sheet        = tksheet.Sheet(self, width=800, height=500)
         self.sheet_worker = SheetManipulator(self.sheet)
         self.csaver       = CacheSaver(self.cache_file)
         self.cretriever   = CacheRetriever(self.cache_file) 
+        self.adapter      = DataAdapter()
+        self.menubar      = MenuBar(self)
+
+
+        if sys.platform == "linux":
+            style = ttk.Style(self)
+            style.configure('TLabel', foreground='red')
+            style.configure('TEntry', foreground='red')
+            style.configure('TMenubutton', foreground='red')
+            style.configure('TButton', foreground='red')
 
         # =============== MENUBAR SETTINGS =================
-        self.menubar.grid(row=0, column=0)
+        self.config(menu=self.menubar)
         # =============== SHEET SETTINGS ===================
         self.sheet.enable_bindings(("all"))
         self.sheet.grid(row=1, column=0, sticky=N+S+E+W)
@@ -49,7 +59,7 @@ class HomeDepotManager(tk.Tk):
 
         filename = filedialog.askopenfilename(initialdir=start_dir,
                                         title="Open a file",
-                                        filetype=( ("csv files", "*.csv"), ("xlsx files", "*.xlsx"),("all files", "*.*")))
+                                        filetypes=( ("csv files", "*.csv"), ("xlsx files", "*.xlsx"),("all files", "*.*")))
         if filename == '' : return
         self.sheet_worker.load_file(filename)
         self.csaver.save_cache(self.cache)
