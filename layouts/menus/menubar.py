@@ -55,5 +55,5 @@ class MenuBar(tk.Menu):
         clearmenu.add_command(label="Column", command=None)
 
         filemenu.add_command(label="Open", command=self.master.open_file)
-        filemenu.add_command(label="Save", command=self.master.save_file)
+        filemenu.add_command(label="Save", command=self.master.sheet_worker.save_file)
         
