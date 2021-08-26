@@ -20,11 +20,11 @@ class HomeDepotManager(tk.Tk):
         self.cache_file = 'app_data.json'
         self.cache = {}
 
+        self.adapter      = DataAdapter()
         self.sheet        = tksheet.Sheet(self, width=800, height=500)
-        self.sheet_worker = SheetManipulator(self.sheet)
+        self.sheet_worker = SheetManipulator(self.sheet, adapter=self.adapter)
         self.csaver       = CacheSaver(self.cache_file)
         self.cretriever   = CacheRetriever(self.cache_file) 
-        self.adapter      = DataAdapter()
         self.menubar      = MenuBar(self)
 
         # =============== MENUBAR SETTINGS =================
@@ -47,11 +47,17 @@ class HomeDepotManager(tk.Tk):
         start_dir = "/"
         if self.cretriever.cache_exists():
             self.cache = self.cretriever.retrieve_cache()
-            if "recently_opened" in self.cache: start_dir = self.cache["recently_opened"]
+            if "recently_opened" in self.cache: 
+                start_dir = self.cache["recently_opened"]
 
         filename = filedialog.askopenfilename(initialdir=start_dir,
                                         title="Open a file",
-                                        filetypes=( ("csv files", "*.csv"), ("xlsx files", "*.xlsx"),("all files", "*.*")))
+                                        filetypes=(
+                                            ("csv files", "*.csv"), 
+                                            ("xlsx files", "*.xlsx"),
+                                            ("all files", "*.*")
+                                        )
+                                    )
         if filename == '' : return
         self.sheet_worker.load_file(filename)
         self.csaver.save_cache(self.cache)
@@ -60,7 +66,12 @@ class HomeDepotManager(tk.Tk):
     def save_file_as(self):
         file_name = filedialog.asksaveasfilename(initialdir="/",
                                 title="Choose file",
-                                filetype=(("csv files", "*.csv"),("xlsx files", "*.xlsx"),("all files", "*.*")))
+                                filetypes=(
+                                            ("csv files", "*.csv"), 
+                                            ("xlsx files", "*.xlsx"),
+                                            ("all files", "*.*")
+                                        )
+                                    )
         if file_name == '' : return
         if (not file_name.endswith(".csv")) and (not file_name.endswith(".xlsx")):
             file_name += ".csv"
