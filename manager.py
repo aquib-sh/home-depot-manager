@@ -27,14 +27,6 @@ class HomeDepotManager(tk.Tk):
         self.adapter      = DataAdapter()
         self.menubar      = MenuBar(self)
 
-
-        if sys.platform == "linux":
-            style = ttk.Style(self)
-            style.configure('TLabel', foreground='red')
-            style.configure('TEntry', foreground='red')
-            style.configure('TMenubutton', foreground='red')
-            style.configure('TButton', foreground='red')
-
         # =============== MENUBAR SETTINGS =================
         self.config(menu=self.menubar)
         # =============== SHEET SETTINGS ===================
