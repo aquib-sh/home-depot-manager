@@ -240,8 +240,8 @@ class OptionsWindow(TopLevelWindow):
     size: tuple (default=(400, 400))
         Size of the window.
     """
-    def __init__(self, adapter, size=(800,600)):
-        super(ChartifyOptions, self).__init__(title=title, size=size)
+    def __init__(self, adapter, size=(800,600), title="Options"):
+        super(OptionsWindow, self).__init__(title=title, size=size)
         self.adapter = adapter
         # =================================== LEFT SIDE ===================================================
         ttk.Label(self, text="Table Font:")                .grid(row=0, column=0, sticky='W', pady=(0, 50))
@@ -271,7 +271,7 @@ class OptionsWindow(TopLevelWindow):
     def transfer_value_and_destroy(self):
         """Inserts the textbox value into the adapter."""
         self.adapter.insert("table-font",               self.table_font.get())
-        self.adapter.insert("table-font-size" ,         self.table_fsize.get
+        self.adapter.insert("table-font-size" ,         self.table_fsize.get)
         self.exit_window()
 
 
