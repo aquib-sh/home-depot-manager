@@ -51,9 +51,10 @@ class MenuBar(tk.Menu):
         deletemenu.add_command(label="Row", command=None)
         deletemenu.add_command(label="Column", command=self.master.sheet_worker.delete_column)
 
-        clearmenu.add_command(label="Row", command=None)
-        clearmenu.add_command(label="Column", command=None)
+        #clearmenu.add_command(label="Row", command=None)
+        clearmenu.add_command(label="Column", command=self.master.sheet_worker.clear_column)
 
         filemenu.add_command(label="Open", command=self.master.open_file)
         filemenu.add_command(label="Save", command=self.master.sheet_worker.save_file)
+        filemenu.add_command(label="Save as", command=self.master.save_file_as)
         
