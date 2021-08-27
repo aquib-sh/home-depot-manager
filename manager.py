@@ -2,11 +2,11 @@
 # Author : Shaikh Aquib
 # Date   : August 2021
 
-import sys
 import tkinter as tk
 import tksheet
+import settings
 from tkinter import N, S, E, W
-from tkinter import ttk, filedialog
+from tkinter import filedialog
 from layouts.menus.menubar import MenuBar
 from processors.sheet_utilities import SheetManipulator
 from processors.cache_memory import CacheSaver, CacheRetriever
@@ -17,7 +17,7 @@ class HomeDepotManager(tk.Tk):
 
     def __init__(self):
         super().__init__()
-        self.cache_file = 'app_data.json'
+        self.cache_file = settings.cache_file
         self.cache = {}
 
         self.adapter      = DataAdapter()
