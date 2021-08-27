@@ -1,0 +1,5 @@
+{
+    "search_box":"//input[@class='SearchBox__input'][@id='headerSearch']",
+    "search_btn":"//button[@class='SearchBox__button'][@id='headerSearchButton']",
+    "price_elems":"//div[@class='price-format__large price-format__main-price']/span"
+}
