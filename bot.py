@@ -6,8 +6,6 @@
 
 import os
 import sys
-import undetected_chromedriver.v2 as uc
-import seleniumwire.webdriver as wired_webdriver
 from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
 from selenium.common.exceptions import NoSuchElementException
@@ -78,7 +76,6 @@ class BotOptions:
         
         firefox_profile: str (OPTIONAL DEFAULT=None)
             Path of the browser profile to use
-            example: r"C:\Users\Tom\AppData\Roaming\Mozilla\Firefox\Profiles\zcpexa0p.myuser"
         """
         opts = webdriver.FirefoxOptions()
         
@@ -148,11 +145,10 @@ class BotMaker:
         
     firefox_profile: str (OPTIONAL DEFAULT=None)
         Path of the browser profile to use
-        example: r"C:\Users\Tom\AppData\Roaming\Mozilla\Firefox\Profiles\zcpexa0p.myuser"
     """
     def __init__(self, behead=False, browser="Firefox", undetected=False, 
         page_load_strategy=None, load_profile:str=None, proxy_info:dict=None, firefox_profile:str=None):
-        dir_driver = os.path.join("resources", "drivers")
+        dir_driver = os.path.join(os.path.abspath("resources"), "drivers")
 
         if sys.platform == "win32":
             dir_driver = os.path.join(dir_driver, "windows")
