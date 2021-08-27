@@ -9,6 +9,9 @@ __pycache__/
 # driver notes
 Driver_Notes/
 
+# test files
+test_*
+
 # C extensions
 *.so
 
