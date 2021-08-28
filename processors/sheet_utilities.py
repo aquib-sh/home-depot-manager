@@ -7,7 +7,7 @@ import pandas
 import numpy as np
 from layouts.window import InsertRowWindow, InsertWindow
 
-class SheetManipulator:
+class SheetProcessor:
     """Performs various tasks on sheet.
     
     Parameters
@@ -125,3 +125,10 @@ class SheetManipulator:
         df_rows = self.df.to_numpy().tolist()  
         self.sheet.headers(self.df.columns.tolist())
         self.sheet.set_sheet_data(df_rows)
+
+
+    def get_sheet_dataframe(self) -> pandas.DataFrame:
+        """Gets the dataframe from sheet."""
+        df = pandas.DataFrame(self.sheet.get_sheet_data(), columns=self.sheet.headers())
+        # return only the data which has values.
+        return df[df['SKU'] != '']
