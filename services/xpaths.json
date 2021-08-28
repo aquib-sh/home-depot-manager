@@ -1,5 +1,12 @@
 {
-    "search_box":"//input[@class='SearchBox__input'][@id='headerSearch']",
-    "search_btn":"//button[@class='SearchBox__button'][@id='headerSearchButton']",
-    "price_elems":"//div[@class='price-format__large price-format__main-price']/span"
+    "search_box"               : "//input[@class='SearchBox__input'][@id='headerSearch']",
+    "search_btn"               : "//button[@class='SearchBox__button'][@id='headerSearchButton']",
+    "price_elems"              : "//div[@class='price-format__large price-format__main-price']/span",
+    "store_search_box"         : "//input[@id='storeSearchBox']",
+    "store_search_btn"         : "//button[@class='bttn bttn--primary bttn--noShadow']",
+    "store_list_section"       : "//section[@data-module='stores/list']",
+    "store_list_section_elems" : "//section[@data-module='stores/list']/div[@class='sfstores']",
+    "store_list_elem"          : "//div[@class='sfstores']",
+    "store_list_elem_title"    : "//h1[@class='sfstorename']",
+    "shop_store_btn"           : "./div[@class='sfstorelinks']/a"
 }
