@@ -1,14 +1,15 @@
 # Home Depot Manager
-# Author : Shaikh Aquib
+# Author : Shaikh Aquib (shaikhaquib394@gmail.com)
 # Date   : August 2021
 
+from services.client import HomeDepotClient
 import tkinter as tk
 import tksheet
 import settings
 from tkinter import N, S, E, W
 from tkinter import filedialog
 from layouts.menus.menubar import MenuBar
-from processors.sheet_utilities import SheetManipulator
+from processors.sheet_utilities import SheetProcessor
 from processors.cache_memory import CacheSaver, CacheRetriever
 from processors.data_adapter import DataAdapter
 
@@ -17,12 +18,13 @@ class HomeDepotManager(tk.Tk):
 
     def __init__(self):
         super().__init__()
+        self.title("Home Depot Manager")
         self.cache_file = settings.cache_file
         self.cache = {}
 
         self.adapter      = DataAdapter()
-        self.sheet        = tksheet.Sheet(self, width=800, height=500)
-        self.sheet_worker = SheetManipulator(self.sheet, adapter=self.adapter)
+        self.sheet        = tksheet.Sheet(self, width=800, height=500, total_rows=1000, total_columns=4)
+        self.sheet_worker = SheetProcessor(self.sheet, adapter=self.adapter)
         self.csaver       = CacheSaver(self.cache_file)
         self.cretriever   = CacheRetriever(self.cache_file) 
         self.menubar      = MenuBar(self)
@@ -30,6 +32,7 @@ class HomeDepotManager(tk.Tk):
         # =============== MENUBAR SETTINGS =================
         self.config(menu=self.menubar)
         # =============== SHEET SETTINGS ===================
+        self.sheet.headers(settings.sheet_columns)
         self.sheet.enable_bindings(("all"))
         self.sheet.grid(row=1, column=0, sticky=N+S+E+W)
         self.sheet.grid_columnconfigure(1, weight=3)
@@ -78,5 +81,15 @@ class HomeDepotManager(tk.Tk):
         self.sheet_worker.save_file_as(file_name)
 
 
+    def scan_price(self):
+        df = self.sheet_worker.get_sheet_dataframe()
+        print(df)
+
+
     def start(self):
         self.mainloop()
+
+
+if __name__ == "__main__":
+    manager = HomeDepotManager()
+    manager.start()
