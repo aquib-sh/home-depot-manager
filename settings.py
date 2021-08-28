@@ -6,3 +6,4 @@ browser          = "Firefox"
 headless         = False
 cache_file       = "app_data.json"
 xpaths_file      = os.path.abspath(os.path.join("services", "xpaths.json"))
+sheet_columns    = ['Store #', 'SKU', 'Item Description', 'Current Price']
