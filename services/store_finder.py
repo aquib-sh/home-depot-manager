@@ -34,8 +34,18 @@ class StoreFinder:
         # Search all store elements if #store_number is found 
         # then click the shop the store element
         stores = self.bot.get_elements(self.xpaths["store_list_section_elems"])
-        for store in stores:
-            if '#'+str(store_number) in store.text:
+        for i in range(0, len(stores)):
+            desired_store = False
+            store = stores[i]
+            while True:
+                try:
+                    desired_store = '#'+str(store_number) in store.text
+                    break
+                except:
+                    stores = self.bot.get_elements(self.xpaths["store_list_section_elems"])
+                    store = stores[i]
+
+            if desired_store:
                 self.bot.get_element(self.xpaths["shop_store_btn" ], 
                         elem=store).click()
                 print(f"[+] Selected #{store_number} store.")
