@@ -1,12 +1,14 @@
 #Author : Shaikh Aquib
 #Date : June 2021
 
-from datetime import datetime
+import time
 import sys
+import threading
 import tkinter as tk
+from datetime import datetime
 from tkinter import Scrollbar, ttk
 from tkinter import messagebox
-from tkinter.constants import BOTTOM, CENTER, E, LEFT, END, RIGHT, W, Y
+from tkinter.constants import BOTTOM, CENTER, E, HORIZONTAL, LEFT, END, RIGHT, W, Y
 sys.path.append('../')
 from tkinter import Label, Button, Text
 
@@ -276,6 +278,40 @@ class OptionsWindow(TopLevelWindow):
 
 
     def destroy_window(self) -> None:        
-        self.adapter.insert("table-font",               None)
-        self.adapter.insert("table-font-size",          None)
+        self.adapter.insert("table-font",      None)
+        self.adapter.insert("table-font-size", None)
         self.exit_window()
+
+
+class ScanPriceWindow(TopLevelWindow):
+    """Takes input settings for building CutChart view.
+    
+    Parameters
+    ----------
+    title: str (default="Chartify Options")
+        Title for window.
+
+    size: tuple (default=(400, 400))
+        Size of the window.
+    """
+    def __init__(self, size=(400,200), title="Scan and Update Prices"):
+        super(ScanPriceWindow, self).__init__(title=title, size=size)
+        self.start_btn = Button(self, text="Start Scan", command=self.start_scan)
+        self.start_btn.pack()
+
+    def start_scan(self):
+        """Starts the scanning process and updates the sheet with latest price data."""
+        status = Label(self, fg='red', font=("Arial", 15))
+        status.pack(pady=50)
+        status.config(text='Scanning for prices...\n\nDo not close this window!', fg='red')
+        self.update()
+
+        # t = threading.Thread(target=self.master.scan_and_update_price)
+        # t.start()
+        # t.join()
+        self.master.scan_and_update_price()
+        
+        status.config(text='Scan Completed!\n\nNow, You can close this window!', fg='green')
+    
+    def start(self):
+        super().start()
