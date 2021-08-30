@@ -2,6 +2,7 @@
 #Date : June 2021
 
 import tkinter as tk
+import threading
 
 
 class MenuBar(tk.Menu):
@@ -43,14 +44,29 @@ class MenuBar(tk.Menu):
 
         # Row, column options for insert, delete and clear
         insertmenu.add_command(label="Row", command=None)
-        insertmenu.add_command(label="Column", command=self.master.sheet_worker.insert_new_column)
+        
+        insertmenu.add_command(
+            label="Column", 
+            command=self.master.sheet_worker.insert_new_column
+            )
         
         deletemenu.add_command(label="Row", command=None)
-        deletemenu.add_command(label="Column", command=self.master.sheet_worker.delete_column)
+
+        deletemenu.add_command(
+            label="Column", 
+            command=self.master.sheet_worker.delete_column
+            )
 
         filemenu.add_command(label="Open", command=self.master.open_file)
-        filemenu.add_command(label="Save", command=self.master.sheet_worker.save_file)
+
+        filemenu.add_command(
+            label="Save", 
+            command=self.master.sheet_worker.save_file
+            )
         filemenu.add_command(label="Save as", command=self.master.save_file_as)
         
         # Tools
-        toolsmenu.add_command(label="Scan Price", command=self.master.scan_price)
+        toolsmenu.add_command(
+            label="Scan Price", 
+            command=self.master.start_scan_process
+            )
