@@ -2,16 +2,18 @@
 # Author : Shaikh Aquib (shaikhaquib394@gmail.com)
 # Date   : August 2021
 
-from services.client import HomeDepotClient
+import threading
 import tkinter as tk
 import tksheet
 import settings
 from tkinter import N, S, E, W
 from tkinter import filedialog
 from layouts.menus.menubar import MenuBar
+from layouts.window import ScanPriceWindow
 from processors.sheet_utilities import SheetProcessor
 from processors.cache_memory import CacheSaver, CacheRetriever
 from processors.data_adapter import DataAdapter
+from services.client import HomeDepotClient
 
 
 class HomeDepotManager(tk.Tk):
@@ -22,12 +24,20 @@ class HomeDepotManager(tk.Tk):
         self.cache_file = settings.cache_file
         self.cache = {}
 
+        self.raw_df = None
+
+        self.client       = HomeDepotClient()
         self.adapter      = DataAdapter()
         self.sheet        = tksheet.Sheet(self, width=800, height=500, total_rows=1000, total_columns=4)
         self.sheet_worker = SheetProcessor(self.sheet, adapter=self.adapter)
         self.csaver       = CacheSaver(self.cache_file)
         self.cretriever   = CacheRetriever(self.cache_file) 
         self.menubar      = MenuBar(self)
+
+        # Columns
+        self.store_no_col = settings.sheet_columns[0]
+        self.sku_col      = settings.sheet_columns[1]
+        self.price_col    = settings.sheet_columns[3]
 
         # =============== MENUBAR SETTINGS =================
         self.config(menu=self.menubar)
@@ -81,9 +91,34 @@ class HomeDepotManager(tk.Tk):
         self.sheet_worker.save_file_as(file_name)
 
 
-    def scan_price(self):
-        df = self.sheet_worker.get_sheet_dataframe()
-        print(df)
+    def __scan_and_update_price(self):
+        """Scans for the pricing and updates the sheet by price values."""
+        raw_df = self.sheet_worker.get_sheet_dataframe()
+        df = raw_df[raw_df['SKU']!='']
+        #prev = ""
+        for i in range(0, len(df[self.sku_col])):
+            row = df.iloc[i]
+            #store_no = str(row[self.store_no_col])
+            sku = str(row[self.sku_col])
+            print(f"[+] Searching for product: {sku}")
+            self.client.bot.move(f'https://homedepot.com/s/{sku}')
+            price = self.client.get_price()
+            raw_df.loc[i][self.price_col] = price
+            # prev = store_no
+        self.raw_df = raw_df
+
+
+    def scan_and_update_price(self):
+        t = threading.Thread(target=self.__scan_and_update_price)
+        t.start()
+        t.join()
+        self.sheet_worker.update_sheet(self.raw_df)
+        print("[+] Sheet updated with latest data")
+
+
+    def start_scan_process(self):
+        scan_window = ScanPriceWindow()
+        scan_window.start()
 
 
     def start(self):
@@ -93,3 +128,4 @@ class HomeDepotManager(tk.Tk):
 if __name__ == "__main__":
     manager = HomeDepotManager()
     manager.start()
+    manager.client.bot.shutdown()
