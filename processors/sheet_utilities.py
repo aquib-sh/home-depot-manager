@@ -127,8 +127,17 @@ class SheetProcessor:
         self.sheet.set_sheet_data(df_rows)
 
 
+    def update_sheet(self, df: pandas.DataFrame):
+        """Updates sheet to the dataframe provided."""
+        self.df = df
+        # Update sheet values.
+        df_rows = self.df.to_numpy().tolist()  
+        self.sheet.headers(self.df.columns.tolist())
+        self.sheet.set_sheet_data(df_rows)
+
+
     def get_sheet_dataframe(self) -> pandas.DataFrame:
         """Gets the dataframe from sheet."""
         df = pandas.DataFrame(self.sheet.get_sheet_data(), columns=self.sheet.headers())
         # return only the data which has values.
-        return df[df['SKU'] != '']
+        return df
